@@ -1,16 +1,5 @@
 # Random Network Distillation
-#### Intrinsic Reward Graph with play
-| Venture             |  Montezuma's Revenge |
-:-------------------------:|:-------------------------:
-![](https://github.com/jcwleo/random-network-distillation-pytorch/blob/master/asset/venture.gif)  |  [![Video Label](https://github.com/jcwleo/random-network-distillation-pytorch/blob/master/asset/montezuma.gif)](https://youtu.be/eEoHnkDUw4k?t=0s)
- ~ | [New model for Montezuma](https://www.youtube.com/watch?v=IxXHQDHvGoE&feature=youtu.be)
 
-- [x] Advantage Actor critic [[1]](#references)
-- [x] Parallel Advantage Actor critic [[2]](#references)
-- [x] Exploration by Random Network Distillation [[3]](#references)
-- [x] Proximal Policy Optimization Algorithms [[4]](#references)
-
- 
 ## 1. Setup
 ####  Requirements
 
