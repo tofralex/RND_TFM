@@ -3,6 +3,8 @@ from envs import *
 from utils import *
 from config import *
 from torch.multiprocessing import Pipe
+import os
+import sys
 
 from tensorboardX import SummaryWriter
 
@@ -12,7 +14,12 @@ import numpy as np
 def main():
     print({section: dict(config[section]) for section in config.sections()})
     train_method = default_config['TrainMethod']
-    env_id = default_config['EnvID']
+    if len(sys.argv)<2:
+        print("Error. Pase como argumento el entorno sobre el que quiera entrenar")
+        return
+    else:
+        env_id = sys.argv[1]
+        
     env_type = default_config['EnvType']
 
     if env_type == 'atari':
@@ -26,12 +33,18 @@ def main():
         output_size -= 1
 
     env.close()
-
-    is_load_model = True
+    
     is_render = False
     model_path = 'models/{}.model'.format(env_id)
     predictor_path = 'models/{}.pred'.format(env_id)
     target_path = 'models/{}.target'.format(env_id)
+    
+    if os.path.isfile(model_path) == True:
+        print('Ya existe un modelo sobre el que entrenar')
+        is_load_model = True
+    else:
+        print('Hay que crear el modelo')
+        is_load_model = False
 
     writer = SummaryWriter()
 
@@ -69,8 +82,6 @@ def main():
 
     if default_config['EnvType'] == 'atari':
         env_type = AtariEnvironment
-    elif default_config['EnvType'] == 'mario':
-        env_type = MarioEnvironment
     else:
         raise NotImplementedError
 
@@ -269,6 +280,7 @@ def main():
                           total_policy)
 
         if global_step % (num_worker * num_step * 100) == 0:
+            print('Lo guardo')
             print('Now Global Step :{}'.format(global_step))
             torch.save(agent.model.state_dict(), model_path)
             torch.save(agent.rnd.predictor.state_dict(), predictor_path)
