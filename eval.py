@@ -8,11 +8,23 @@ from tensorboardX import SummaryWriter
 
 import numpy as np
 import pickle
+import sys
+import os, glob
 
 
 def main():
     print({section: dict(config[section]) for section in config.sections()})
-    env_id = default_config['EnvID']
+    if len(sys.argv)<2:
+        print("Error. Pase como argumento el entorno que quiera evaluar")
+        print("Los modelos disponibles son: ")
+        available_models = [os.path.basename(f) for f in glob.glob(os.path.join("models/", '*.model'))]
+        for model in available_models:
+            model_name = model.strip(".model")
+            print(model_name)
+        return
+    else:
+        env_id = sys.argv[1]
+        
     env_type = default_config['EnvType']
 
     if env_type == 'atari':
@@ -31,6 +43,11 @@ def main():
     model_path = 'models/{}.model'.format(env_id)
     predictor_path = 'models/{}.pred'.format(env_id)
     target_path = 'models/{}.target'.format(env_id)
+
+    if os.path.isfile(model_path) == False:
+        print('No existe un modelo de entrenamiento para este entorno')
+        print('Ejecute "python train.py [NOMBRE DEL MODELO]" para generar un modelo para evaluar')
+        return
 
     use_cuda = False
     use_gae = default_config.getboolean('UseGAE')

@@ -5,6 +5,7 @@ from config import *
 from torch.multiprocessing import Pipe
 import os
 import sys
+from gym import envs
 
 from tensorboardX import SummaryWriter
 
@@ -14,8 +15,15 @@ import numpy as np
 def main():
     print({section: dict(config[section]) for section in config.sections()})
     train_method = default_config['TrainMethod']
+
+    all_envs = envs.registry.all()
+    env_ids = [env_spec.id for env_spec in all_envs]
+
     if len(sys.argv)<2:
         print("Error. Pase como argumento el entorno sobre el que quiera entrenar")
+        print("Estos son los modelos disponibles: ")
+        for env in env_ids: 
+            print(env)
         return
     else:
         env_id = sys.argv[1]
@@ -34,7 +42,7 @@ def main():
 
     env.close()
     
-    is_render = False
+    is_render = True
     model_path = 'models/{}.model'.format(env_id)
     predictor_path = 'models/{}.pred'.format(env_id)
     target_path = 'models/{}.target'.format(env_id)

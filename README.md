@@ -1,9 +1,13 @@
 # Random Network Distillation
 
+Please before testing install requirements.txt to be able to execute succesfully the code
+
+Use: pip install -r requirements.txt
+
 ## 1. How to Train
 Modify the parameters in `config.conf` as you like.
 ```
-python train.py
+python train.py [NAME OF THE ENVIRONMENT]
 ```
 
 ## 2. How to Eval
